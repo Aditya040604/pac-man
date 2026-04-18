@@ -1,4 +1,4 @@
 {"name": "requests",
 "version": "1.0.0",
-"dependencies": ["urlib3"]
+"dependencies": ["urllib3", "certifi"]
 }
