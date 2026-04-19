@@ -10,4 +10,21 @@ def load_packages():
     
 def save_packages(packages):
     with open(DB_FILE, "w") as f:
-        json.dump(packages,f )
+        json.dump(packages,f, indent=4 )
+    
+    print("Saved Installed Packages")
+    for name, version in packages.items():
+        print(f"{name} == {version}")
+
+def extract_packages(graph):
+    packages = {}
+    for pkg, deps in graph.items():
+        name, version = pkg
+        packages[name] = version
+        for dep in deps:
+            dep_name, dep_ver = dep
+            packages[dep_name] = dep_ver
+    return packages
+
+
+

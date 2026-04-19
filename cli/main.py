@@ -5,7 +5,8 @@ from storage.packages import load_packages
 
 
 def install(args):
-    install_with_resolver(args.package)
+    
+    install_with_resolver(args.package_str)
 
 def list_packages(args):
     packages = load_packages()
@@ -21,17 +22,17 @@ def list_packages(args):
 
 # --- CLI Setup
 def main():
-    parser = argparse.ArgumentParser(prog="mypm")
+    parser = argparse.ArgumentParser(prog="pac-man")
     subparsers = parser.add_subparsers(dest="command")
 
     # install command
     install_parser = subparsers.add_parser("install")
-    install_parser.add_argument("package")
+    install_parser.add_argument("package_str")
     install_parser.set_defaults(func=install)
 
     # remove command
     remove_parser = subparsers.add_parser("remove")
-    remove_parser.add_argument("package")
+    remove_parser.add_argument("package_str")
     remove_parser.set_defaults(func=remove)
 
 

@@ -1,18 +1,31 @@
+import re
 from core.meta import load_meta
-
+from core.versions import resolve_version
 
 # Build Graph
 
-def build_graph(package, graph, visited):
-   if package in visited:
+def build_graph(package_tuple, graph, visited):
+   name, version = package_tuple
+   if package_tuple in visited:
        return
-   visited.add(package)
-   meta = load_meta(package)
+   visited.add(package_tuple)
+   meta = load_meta(name, version)
    if not meta:
-       raise Exception(f"Package '{package}' not found.")
-   deps = meta.get("dependencies", [])
-   graph[package] = deps
-   for dep in deps:
+       raise Exception(f"Package '{name}' not found.")
+   
+   resolved_deps = []
+
+   for dep in meta.get("dependencies", []):
+       dep_name, op, ver = parse_dependency(dep)
+       resolved_version = resolve_version(dep_name, op, ver)
+       
+       if not resolved_version:
+           raise Exception(f"Cannot resolve {dep}")
+       resolved_deps.append((dep_name, resolved_version))
+
+
+   graph[package_tuple] = resolved_deps
+   for dep in resolved_deps:
        build_graph(dep, graph, visited)
 
 
@@ -35,3 +48,12 @@ def topo_sort(graph):
     for node in graph:
         dfs(node)
     return order
+
+def parse_dependency(dep):
+    match = re.match(r"([a-zA-Z0-9_]+)([<>=!]+)?(.+)?", dep)
+
+    name = match.group(1)
+    op = match.group(2)
+    version = match.group(3)
+
+    return name,op, version
