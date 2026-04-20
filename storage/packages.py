@@ -13,6 +13,7 @@ def save_packages(packages):
         json.dump(packages,f, indent=4 )
     
     print("Saved Installed Packages")
+    # Remove the for loop in the future
     for name, version in packages.items():
         print(f"{name} == {version}")
 

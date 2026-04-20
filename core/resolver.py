@@ -49,11 +49,20 @@ def topo_sort(graph):
         dfs(node)
     return order
 
-def parse_dependency(dep):
-    match = re.match(r"([a-zA-Z0-9_]+)([<>=!]+)?(.+)?", dep)
+def parse_dependency(dep_str):
+    match = re.match(r"^([a-zA-Z0-9_\-]+)(?:([<>=!]=?)(.+))?$", dep_str)
 
+    if not match:
+        raise Exception(f"Invalid Package: {dep_str}")
+    
     name = match.group(1)
-    op = match.group(2)
-    version = match.group(3)
+    op_ver = match.group(2)
 
-    return name,op, version
+    if op_ver:
+        op = re.match(r"[<>=!]+", op_ver).group()
+        ver = op_ver[len(op):]
+    else:
+        op = None
+        ver = None
+
+    return name,op, ver

@@ -11,7 +11,7 @@ def remove_with_cleanup(package, installed_packages):
     if os.path.exists(path):
         delete_package(path)
 
-    installed_packages.remove(package)
+    installed_packages.pop(package)
 
     print(f"Removed '{package}'")
 
@@ -24,9 +24,12 @@ def remove_with_cleanup(package, installed_packages):
         if dep in installed_packages and not is_dependency(dep, installed_packages):
             remove_with_cleanup(dep, installed_packages)
 
+# Problem: Right now, always newly installed version will replace the old package in the installed packages json. So, for now there is no need of version checking before removing packages.
+
 
 def remove(args):
-    package = args.package
+    # Task: change the args.package to args.package_str and update the code to remove packages based on version
+    package = args.package_str
     installed_packages = load_packages()
 
     if package not in installed_packages:

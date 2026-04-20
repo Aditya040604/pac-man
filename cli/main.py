@@ -15,8 +15,9 @@ def list_packages(args):
         print("No packages installed")
         return 
     print("Installed packages:")
-    for pkg in packages:
-        print("-", pkg)
+    for pkg, version in packages.items():
+    #  Check the packages alignment in the console; it's a bit off. Fix this last
+        print("-", pkg, " ", version)
 
 
 

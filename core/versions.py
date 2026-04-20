@@ -9,22 +9,31 @@ def get_versions(package):
     return sorted(os.listdir(path))
 
 def compare_version(v1, v2):
-    return list(map(int, v1.split("."))) >= list(map(int, v2.split(".")))
+    return tuple(map(int, v1.split("."))) >= tuple(map(int, v2.split(".")))
 
+def version_key(v):
+    return tuple(map(int, v.split(".")))
 
 def resolve_version(package, op, version):
-    versions = get_versions(package)
-    print("versions", versions)
+    available_versions = get_versions(package)
+    print("versions", available_versions)
 
-    if not versions:
+    if not available_versions:
         return None
     
-    versions.sort(reverse=True)
 
-    for v in versions:
+    available_versions.sort(key=version_key,reverse=True)
+
+    for v in available_versions:
         if not op:
             # If no op specified then choose the latest version by default
             return v
+        
+        if op == ">" and version_key(v) > version_key(version):
+            return v
+        if op == "<" and version_key(v) < version_key(v):
+            return v
+
         if op == "==" and v == version:
             return v
 
