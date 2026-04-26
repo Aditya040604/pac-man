@@ -56,13 +56,8 @@ def parse_dependency(dep_str):
         raise Exception(f"Invalid Package: {dep_str}")
     
     name = match.group(1)
-    op_ver = match.group(2)
+    op = match.group(2)
+    ver = match.group(3)
+    print(name, op, ver)
 
-    if op_ver:
-        op = re.match(r"[<>=!]+", op_ver).group()
-        ver = op_ver[len(op):]
-    else:
-        op = None
-        ver = None
-
-    return name,op, ver
+    return name, op, ver

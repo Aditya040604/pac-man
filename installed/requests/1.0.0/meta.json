@@ -1,4 +1,0 @@
-{"name": "requests",
-"version": "1.0.0",
-"dependencies": ["urllib3", "certifi"]
-}
